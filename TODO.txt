@@ -1,0 +1,3 @@
+1. The code quality is generally bad. Need lots of improvements.
+2. The serial port name is hardcoded in the code now. Need to generalize it.
+3. A GUI in future.

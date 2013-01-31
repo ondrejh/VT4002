@@ -1,3 +1,9 @@
+1. Generalize chamber drive functions.
+2. Add some notes and comments to it.
+3. Add chamber start/stop function.
+
+-------------------------------------------------------------------------------
+
 1. The code quality is generally bad. Need lots of improvements.
 2. The serial port name is hardcoded in the code now. Need to generalize it.
 3. A GUI in future.

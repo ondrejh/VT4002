@@ -1,9 +1,11 @@
 #! /usr/bin/python3
 
+import serial
 from optparse import OptionParser
 
 #portname = '/dev/ttyS0'
 portname = 'COM8'
+timeout = 0.5
 address = 1
 
 def parse_input():
@@ -21,21 +23,19 @@ def parse_input():
 
 def set_temp(temp):
 	# sets the temperature as temp 
-	ser = serial.Serial(portname, 9600, timeout=1)
+	ser = serial.Serial(portname, 9600, timeout=timeout)
 	nominal_temp_string = '${:02X}E {}\r\n'.format(address,temp)
-	ser.write(nominal_temp_string.encode('ascii')) 
-	#time.sleep(2)
+	ser.write(nominal_temp_string.encode('ascii'))
+	ser.readlines() #flush port (ack should be there)
 	
 	'''verifying by reading the present nominal temperature and
 	   compare it with the input temperature '''
 	ser.write('${:02X}I\r\n'.format(address).encode('ascii'))
 	lines = ser.readlines()
-	#print(lines)
 	line=lines[len(lines)-1].decode('ascii')
 	value = line.split(' ')
-	value = value[0].split('\r')
 	#print(value)
-	if len(value)>1 and value[1]!='' and float(value[1])==float(temp):
+	if len(value)>0 and value[0]!='' and float(value[0])==float(temp):
 		print('Temperature set to {} successfully'.format(temp))
 	else:
 		print('Error in setting temperature. Please check the setup')
@@ -43,9 +43,9 @@ def set_temp(temp):
 if __name__=="__main__":
 	#temp = parse_input()
 	temp=35.0
-	try:
-		set_temp(temp)
-	except:
-		print('Error in setting temperature. Please check the setup')
+	#try:
+	set_temp(temp)
+	#except:
+	#	print('Error in setting temperature. Please check the setup')
 		  
 

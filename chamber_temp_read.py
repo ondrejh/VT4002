@@ -12,6 +12,7 @@ lines = ser.readlines()
 try:
         line = lines[len(lines)-1].decode('ascii')
         value = line.split(' ')
+        print(value)
         stemp = float(value[0])
         atemp = float(value[1])
         print('Set at Temperature: {}C'.format(stemp))

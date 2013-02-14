@@ -12,10 +12,11 @@ lines = ser.readlines()
 try:
         line = lines[len(lines)-1].decode('ascii')
         value = line.split(' ')
-        print(value)
+        #print(value)
         stemp = float(value[0])
         atemp = float(value[1])
         print('Set at Temperature: {}C'.format(stemp))
         print('Actual Temperature: {}C'.format(atemp))
+        print('Air conditioning is {}'.format('stopped' if value[10][1]=='0' else 'running'))
 except:
         print('Can\'t get correct feedback!')

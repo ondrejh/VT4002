@@ -30,3 +30,5 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 Converted into Python3 like code. Some parametrization (port, address).
 Tested on WXP.
+
+Functions unified and moved into one file. Now it can be used as module for another app.

@@ -65,13 +65,13 @@ class runapp_gui(Frame):
 		self.frmButtons.pack(side=TOP)
 		#read button
 		self.btnRead = Button(self.frmButtons, text="Read", command=self.readClick)
-		self.btnRead.grid(row=0,sticky=W+E)
+		self.btnRead.grid(row=0,sticky=W+E,pady=1)
 		#start button
 		self.btnStart = Button(self.frmButtons, text="Start", command=self.startClick)
-		self.btnStart.grid(row=1,sticky=W+E)
+		self.btnStart.grid(row=1,sticky=W+E,pady=1)
 		#stop button
 		self.btnStop = Button(self.frmButtons, text="Stop", command=self.stopClick)
-		self.btnStop.grid(row=2,sticky=W+E)
+		self.btnStop.grid(row=2,sticky=W+E,pady=1)
 
 		#status bar frame
 		self.frmStatusBar = Frame(self.root)
@@ -97,8 +97,8 @@ class runapp_gui(Frame):
 				if answ[0]=='E':
 					self.sayReadError('ERROR')
 				else:
-					self.strActualTemp.set('{:.1f}'.answ[1])
-					self.strSettedTemp.set('{:.1f}'.answ[0])
+					self.strActualTemp.set('{:.1f}'.format(answ[1]))
+					self.strSettedTemp.set('{:.1f}'.format(answ[0]))
 					self.strStatus.set(answ[2])
 					self.strStatusBar.set('Temperature read OK')
 			else:
@@ -121,8 +121,8 @@ class runapp_gui(Frame):
 				answ = set_temp(PortName,setTemp,status,verbose=False)
 				if len(answ)>0:
 					if answ[0]!='E':
-						self.strStatus.set('{}'.answ[1])
-						self.strSettedTemp.set('{:.1f}'.answ[0])
+						self.strStatus.set('{}'.format(answ[1]))
+						self.strSettedTemp.set('{:.1f}'.format(answ[0]))
 						self.strStatusBar.set('Temperature set OK')
 					else:
 						self.saySetError('ERROR')
@@ -135,7 +135,7 @@ class runapp_gui(Frame):
 		self.setTemp('ON')
 
 	def stopClick(self):
-		self.setTemp('ON')
+		self.setTemp('OFF')
 		
 #run application
 app = runapp_gui()

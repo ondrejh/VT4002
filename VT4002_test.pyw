@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 
 from tkinter import *
-from chamber_temp import *
+from VT4002 import *
 
 
 #system configuration

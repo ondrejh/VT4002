@@ -33,3 +33,5 @@ Tested on WXP.
 
 The driving/monitoring functions "set_temp" and "read_temp" are now located in VT4002.py module. The module can be run itself, providing some parameters (for example "VT4002.py -p COM3 -t -15 -s ON" to start cooling at -15C or "VT4002.py -p COM3" to read setted and actual temperature and ON/OFF status).
 There is a simple GUI for testing VT4002.py module named VT4002_test.pyw - not perfect, but good example howto use it.
+
+VT4002_climate_chamber.pdf file was removed from the git repo - I shouldn't be included in GPL project (I think). Please google it if you need it (or dig it from the repo history).

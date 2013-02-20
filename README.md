@@ -31,4 +31,5 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 Converted into Python3 like code. Some parametrization (port, address).
 Tested on WXP.
 
-Functions unified and moved into one file. Now it can be used as module for another app.
+The driving/monitoring functions "set_temp" and "read_temp" are now located in VT4002.py module. The module can be run itself, providing some parameters (for example "VT4002.py -p COM3 -t -15 -s ON" to start cooling at -15C or "VT4002.py -p COM3" to read setted and actual temperature and ON/OFF status).
+There is a simple GUI for testing VT4002.py module named VT4002_test.pyw - not perfect, but good example howto use it.

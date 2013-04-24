@@ -6,7 +6,7 @@ from optparse import OptionParser
 
 
 #default_portname = '/dev/ttyS0'
-default_portname = 'COM8'
+default_portname = 'COM3'
 timeout = 0.5
 #address = 0
 address = 1
@@ -106,6 +106,7 @@ def read_temp(portname,verbose=True):
 	ser = serial.Serial(portname, 9600, timeout=1)
 	ser.write('${:02X}I\r\n'.format(address).encode('ascii'))
 	lines = ser.readlines()
+	#print(lines)
 	try:
 		line = lines[len(lines)-1].decode('ascii')
 		value = line.split(' ')

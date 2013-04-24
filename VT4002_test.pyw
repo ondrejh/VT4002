@@ -5,7 +5,7 @@ from VT4002 import *
 
 
 #system configuration
-PortName = 'COM8'
+PortName = 'COM3'
 
 
 #application class
@@ -17,6 +17,7 @@ class runapp_gui(Frame):
 		self.root.title('VT4002 ({})'.format(PortName))
 		Frame.__init__(self,master)
 		self.createWidgets()
+		self.readCycle()
 	
 	def createWidgets(self):
 		#values and button frame
@@ -72,6 +73,31 @@ class runapp_gui(Frame):
 		#stop button
 		self.btnStop = Button(self.frmButtons, text="Stop", command=self.stopClick)
 		self.btnStop.grid(row=2,sticky=W+E,pady=1)
+
+		#settings frame
+		self.frmSettings = Frame(self.root,bd=3)
+		self.frmSettings.pack(fill=X)
+		self.frmSettings.grid_columnconfigure(0,weight=1)
+		#autoread radiobutton
+		self.boolAutoRead = BooleanVar()
+		self.chbAutoRead = Checkbutton(self.frmSettings,text="Auto Read",variable=self.boolAutoRead,onvalue=True,offvalue=False,command=self.autoreadClick)
+		self.chbAutoRead.grid(row=0,column=0,sticky=W)
+		self.strAutoReadTime = StringVar()
+		self.strAutoReadTime.set("60")
+		self.spbAutoReadTime = Spinbox(self.frmSettings,textvariable=self.strAutoReadTime,from_=10,to=120,width=8)
+		self.spbAutoReadTime.grid(row=0,column=1,sticky=E)
+		labAutoReadTimeUnit = Label(self.frmSettings,text="sec")
+		labAutoReadTimeUnit.grid(row=0,column=2,sticky=W+E)
+		#autooff radiobutton
+		self.boolAutoOff = BooleanVar()
+		self.chbAutoOff = Checkbutton(self.frmSettings,text="Auto Off",variable=self.boolAutoOff,onvalue=True,offvalue=False,command=self.autooffClick)
+		self.chbAutoOff.grid(row=1,column=0,sticky=W)
+		self.strAutoOffTime = StringVar()
+		self.strAutoOffTime.set("120")
+		self.spbAutoOffTime = Spinbox(self.frmSettings,textvariable=self.strAutoOffTime,from_=1,to=600,width=8)
+		self.spbAutoOffTime.grid(row=1,column=1,sticky=E)
+		labAutoOffTimeUnit = Label(self.frmSettings,text="min")
+		labAutoOffTimeUnit.grid(row=1,column=2,sticky=W)
 
 		#status bar frame
 		self.frmStatusBar = Frame(self.root)
@@ -136,7 +162,53 @@ class runapp_gui(Frame):
 
 	def stopClick(self):
 		self.setTemp('OFF')
-		
+
+	def readCycle(self):
+		if self.boolAutoRead.get() == True:
+			if self.boolAutoOff.get() == False:
+				self.readClick()
+			self.after(int(self.strAutoReadTime.get())*1000,self.readCycle)
+
+	def autoreadClick(self):
+		if self.boolAutoRead.get() == True:
+			self.btnRead.config(state=DISABLED)
+			self.btnStart.config(state=DISABLED)
+			self.btnStop.config(state=DISABLED)
+			self.readCycle()
+		else:
+			if self.boolAutoOff.get() == False:
+				self.btnRead.config(state=NORMAL)
+				self.btnStart.config(state=NORMAL)
+				self.btnStop.config(state=NORMAL)
+
+	def autooffClick(self):
+		if self.boolAutoOff.get() == True:
+			self.intAutoOffTime = int(self.strAutoOffTime.get()) + 1
+			self.btnRead.config(state=DISABLED)
+			self.btnStart.config(state=DISABLED)
+			self.btnStop.config(state=DISABLED)
+			self.autooffTimeTick()
+		else:
+			if self.boolAutoRead.get() == False:
+				self.btnRead.config(state=NORMAL)
+				self.btnStart.config(state=NORMAL)
+				self.btnStop.config(state=NORMAL)
+
+	def autooffTimeTick(self):
+		if self.boolAutoOff.get() == True:
+			if self.boolAutoRead.get() == True:
+				self.readClick()
+			if self.intAutoOffTime>=0:
+				self.intAutoOffTime = self.intAutoOffTime - 1
+				if self.intAutoOffTime<0:
+					self.stopClick()
+					self.strStatusBar.set('Air conditioning is stopped')
+				else:
+					self.strStatusBar.set('Stop in {} minutes'.format(self.intAutoOffTime))
+			else:
+				self.strStatusBar.set('Air conditioning is stopped')
+			self.after(60000,self.autooffTimeTick)
+	
 #run application
 app = runapp_gui()
 app.mainloop()

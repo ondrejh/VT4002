@@ -6,7 +6,7 @@ from optparse import OptionParser
 
 
 #default_portname = '/dev/ttyS0'
-default_portname = 'COM3'
+default_portname = 'COM1'
 timeout = 0.5
 #address = 0
 address = 1
@@ -78,21 +78,24 @@ def set_temp(portname,temp,status='ON',verbose=True):
 	'''verifying by reading the present nominal temperature and
 	   compare it with the input temperature '''
 	ser.write('${:02X}I\r\n'.format(address).encode('ascii'))
-	lines = ser.readlines()
-	line=lines[len(lines)-1].decode('ascii')
-	value = line.split(' ')
-	#print(value)
-	if len(value)>0 and value[0]!='' and float(value[0])==float(temp):
-		if verbose==True:
-			print('Temperature set to {} successfully'.format(temp))
-			print('Air conditioning is {}'.format('stopped' if value[10][1]=='0' else 'running'))
+	try:
+		lines = ser.readlines()
+		line=lines[len(lines)-1].decode('ascii')
+		value = line.split(' ')
+		#print(value)
+		if len(value)>0 and value[0]!='' and float(value[0])==float(temp):
+			if verbose==True:
+				print('Temperature set to {} successfully'.format(temp))
+				print('Air conditioning is {}'.format('stopped' if value[10][1]=='0' else 'running'))
+			else:
+				return([temp,'OFF' if value[10][1]=='0' else 'ON'])
 		else:
-			return([temp,'OFF' if value[10][1]=='0' else 'ON'])
-	else:
-		if verbose==True:
-			print('Error in setting temperature. Please check the setup')
-		else:
-			return('ERROR')
+			if verbose==True:
+				print('Error in setting temperature. Please check the setup')
+			else:
+				return('ERROR')
+	except:
+		return('ERROR')
 
 
 def read_temp(portname,verbose=True):
@@ -128,7 +131,7 @@ def read_temp(portname,verbose=True):
 
 		
 if __name__=="__main__":
-	[port,temp,status] = parse_input()
+	'''[port,temp,status] = parse_input()
 	#print([port,temp,status])
 	try:
 		if temp!=None or status!=None:
@@ -137,3 +140,6 @@ if __name__=="__main__":
 			read_temp(port)
 	except:
 		print('Error in setting/reading temperature. Please check the setup.')
+	'''
+	print(set_temp(default_portname,35.0,'ON',verbose=False))
+	print(read_temp(default_portname,verbose=False))
